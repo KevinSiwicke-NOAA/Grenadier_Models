@@ -58,28 +58,6 @@ cpue_dat |>
   write_csv(paste0(out_path, '/cpue_data_wide.csv'))
 
 # Model for 2024
-
-
-# Plots of Model 24
-compare <- compare_rema_models(rema_models = list(m24))
-
-compare$plots$total_predicted_biomass +
-  labs(subtitle = 'Total predicted biomass (t)',
-       fill = NULL, colour = NULL) +
-  scale_y_continuous(expand = c(0,0), limits =c(0, 700000)) 
-
-ggsave(filename = paste0(out_path, '/Mod24_biomass.png'),
-       dpi = 300, bg = 'white', units = 'in', height = 7, width = 10)
-
-cowplot::plot_grid(compare$plots$biomass_by_strata +
-                     labs(x = 'Year', y = 'Biomass (t)', subtitle = NULL,
-                          fill = NULL, colour = NULL, shape = NULL, lty = NULL) +
-                     coord_cartesian(ylim=c(0, 500000)) +
-                     facet_wrap(~factor(strata, levels=c('WGOA (0-500 m)','CGOA (0-500 m)','EGOA (0-500 m)',
-                                                         'WGOA (501-700 m)','CGOA (501-700 m)','EGOA (501-700 m)',
-                                                         'WGOA (701-1000 m)','CGOA (701-1000 m)','EGOA (701-1000 m)')), ncol = 3) +
-                     theme(legend.position = "top"))
-# Model for 2024
 input <- prepare_rema_input(model_name = 'Model 24',
                             multi_survey = 1,
                             biomass_dat = biomass_dat,
@@ -142,3 +120,6 @@ ggsave(filename = paste0(out_path, '/Mod24_strata.png'),
 
 compare$output$total_predicted_biomass |> 
   write_csv(paste0(out_path, '/goa_tot_pred_biom.csv'))
+
+out24$parameter_estimates  |> 
+  write_csv(paste0(out_path, '/goa_param_est.csv')) 

@@ -189,3 +189,6 @@ ggsave(filename = paste0(out_path, '/Mod24_biomass_strata.png'),
 
 comp$output$total_predicted_biomass |> 
   write_csv(paste0(out_path, '/ebs_tot_pred_biom.csv')) 
+
+out24.1$parameter_estimates  |> 
+  write_csv(paste0(out_path, '/ebs_param_est.csv')) 
