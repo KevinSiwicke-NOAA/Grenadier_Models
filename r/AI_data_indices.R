@@ -40,22 +40,20 @@ cpue <- dbGetQuery(channel_akfin,
   rename_all(tolower)
 
 ggplot(cpue |> filter(geographic_area_name %in% c("NE Aleutians slope", "SE Aleutians slope")), aes(year, rpn/100000)) +
-  geom_line() +
   geom_point() + 
   facet_wrap(~geographic_area_name, nrow = 2) + 
-  geom_ribbon(aes(ymin = rpn/100000 - 1.96*sqrt(rpn_var)/100000, 
-                  ymax = rpn/100000 + 1.96*sqrt(rpn_var)/100000), alpha = 0.2) +
+  geom_errorbar(aes(ymin = rpn/100000 - 1.96*sqrt(rpn_var)/100000, 
+                  ymax = rpn/100000 + 1.96*sqrt(rpn_var)/100000)) +
   labs(x = 'Year', y = 'RPN') +
   theme_bw()
 
 ggsave(file = paste0(out_path, "/AI_strata_rpn.png"), dpi = 300, units = "in", height = 6, width = 4)
 
 ggplot(cpue |> filter(geographic_area_name %in% c("NE Aleutians slope", "SE Aleutians slope")), aes(year, rpw/100000)) +
-  geom_line() +
   geom_point() + 
   facet_wrap(~geographic_area_name, nrow = 2) + 
-  geom_ribbon(aes(ymin = rpw/100000 - 1.96*sqrt(rpw_var)/100000, 
-                  ymax = rpw/100000 + 1.96*sqrt(rpw_var)/100000), alpha = 0.2) +
+  geom_errorbar(aes(ymin = rpw/100000 - 1.96*sqrt(rpw_var)/100000, 
+                  ymax = rpw/100000 + 1.96*sqrt(rpw_var)/100000)) +
   labs(x = 'Year', y = 'RPW') +
   theme_bw()
 
@@ -71,10 +69,9 @@ cpue_dat <- cpue |>
   mutate(strata = "AI")
 
 ggplot(cpue_dat, aes(year, rpw/100000)) +
-  geom_line() +
   geom_point() + 
-  geom_ribbon(aes(ymin = rpw/100000 - 1.96*sqrt(rpw_var)/100000, 
-                  ymax = rpw/100000 + 1.96*sqrt(rpw_var)/100000), alpha = 0.2) +
+  geom_errorbar(aes(ymin = rpw/100000 - 1.96*sqrt(rpw_var)/100000, 
+                  ymax = rpw/100000 + 1.96*sqrt(rpw_var)/100000)) +
   labs(x = 'Year', y = 'RPW') +
   scale_y_continuous(expand = c(0,0), limits = c(0, 16)) +
   theme_bw()
@@ -82,10 +79,9 @@ ggplot(cpue_dat, aes(year, rpw/100000)) +
 ggsave(file = paste0(out_path, "/AI_rpw.png"), dpi = 300, units = "in", height = 4, width = 8)
 
 ggplot(cpue_dat, aes(year, rpn/100000)) +
-  geom_line() +
   geom_point() + 
-  geom_ribbon(aes(ymin = rpn/100000 - 1.96*sqrt(rpn_var)/100000, 
-                  ymax = rpn/100000 + 1.96*sqrt(rpn_var)/100000), alpha = 0.2) +
+  geom_errorbar(aes(ymin = rpn/100000 - 1.96*sqrt(rpn_var)/100000, 
+                  ymax = rpn/100000 + 1.96*sqrt(rpn_var)/100000)) +
   labs(x = 'Year', y = 'RPN') +
   scale_y_continuous(expand = c(0,0), limits = c(0, 4)) +
   theme_bw()
@@ -113,15 +109,14 @@ ai_biom <- biom |>
 
 # write_csv(paste0(out_path, "/")
 
-ggplot(ai_biom, aes(year, biomass / 100000)) + 
-  geom_line() +
+ggplot(ai_biom, aes(year, biomass / 1000)) + 
   geom_point() + 
-  geom_ribbon(aes(ymin = biomass /100000 - biomass/100000*cv, 
-                  ymax = biomass/100000 + biomass/100000*cv), alpha = 0.2) +
-  labs(x = "Year", y = "Biomass (100,000 t)") +
+  geom_errorbar(aes(ymin = biomass /1000 - biomass/1000*cv, 
+                  ymax = biomass/1000 + biomass/1000*cv)) +
+  labs(x = "Year", y = "Biomass (kt)") +
   theme_bw() +
   scale_x_continuous(breaks = seq(1990, 2025, 5)) +
-  scale_y_continuous(expand = c(0,0), limits = c(0, 3.9))
+  scale_y_continuous(expand = c(0,0), limits = c(0, 390))
 
 ggsave(paste0(out_path, '/AI_biom.png'), dpi = 300, height = 4, width = 8)
 
@@ -135,12 +130,12 @@ biomass <- biom |>
   summarize(n = sum(n_haul), biomass = sum(biomass_mt, na.rm = TRUE),
             cv = sqrt(sum(biomass_var, na.rm = TRUE))/biomass) 
 
-ggplot(biomass, aes(year, biomass / 10000)) + 
-  geom_line() +
+ggplot(biomass, aes(year, biomass / 1000)) + 
+  # geom_line() +
   geom_point() + 
   facet_wrap(~factor(strata, levels = c("WAI (1-500 m)", "CAI (1-500 m)", "EAI (1-500 m)", "SBS (1-500 m)")), nrow = 1) + 
-  geom_ribbon(aes(ymin = biomass /10000 - biomass/10000*cv, ymax = biomass/10000 + biomass/10000*cv), alpha = 0.2) +
-  labs(x = "Year", y = "Biomass (10,000 t)") +
+  geom_errorbar(aes(ymin = biomass /1000 - biomass/1000*cv, ymax = biomass/1000 + biomass/1000*cv)) +
+  labs(x = "Year", y = "Biomass (kt)") +
   theme_bw()
 
 ggsave(file = paste0(out_path, "/area_BTS_AI_index.png"), dpi = 300, units = "in", height = 3, width = 10)
@@ -163,9 +158,10 @@ bt_dat <- ai_biom |>
 
 combo <- bind_rows(ll_dat, bt_dat) 
 
-ggplot(combo, aes(year, index, col = Survey)) +
-  geom_line(linewidth = 2) +
-  geom_point(size = 2) +
+ggplot(combo, aes(year, index, shape = Survey)) +
+  # geom_line(linewidth = 2) +
+  scale_shape_manual(values = c(1,16)) +
+  geom_point(size = 5) +
   geom_hline(yintercept = 1,  lty = 2) +
   # geom_errorbar(aes(ymin = index - index*cv, ymax = index + index*cv)) +
   labs(x = "Year", y = "Relative Index") +

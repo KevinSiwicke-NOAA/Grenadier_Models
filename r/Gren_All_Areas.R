@@ -61,10 +61,10 @@ area_index <- area_dat |>
   write_csv(paste0(out_path, '/LLS_area_indices.csv'))
 
 ggplot(area_index |> filter(!strata == "WAI"), aes(year, rpn / 100000)) + 
-  geom_line() +
+  # geom_line() +
   geom_point() + 
-  geom_ribbon(aes(ymin = rpn / 100000 - 1.96*sqrt(rpn_var) / 100000, 
-                  ymax = rpn / 100000+ 1.96*sqrt(rpn_var) / 100000), alpha = 0.2) + 
+  geom_errorbar(aes(ymin = rpn / 100000 - 1.96*sqrt(rpn_var) / 100000, 
+                  ymax = rpn / 100000+ 1.96*sqrt(rpn_var) / 100000)) + 
   labs(x = 'Year', y = 'Relative Population Numbers') +
   scale_x_continuous(breaks = seq(1995, 2025, 5)) +
   scale_y_continuous(expand = c(0,0), limits = c(0, 4)) +
@@ -74,10 +74,10 @@ ggplot(area_index |> filter(!strata == "WAI"), aes(year, rpn / 100000)) +
 ggsave(paste0(out_path, '/Area_LL_rpn.png'), dpi = 300, height = 6, width = 12)
 
 ggplot(area_index |> filter(!strata == "WAI"), aes(year, rpw / 100000)) + 
-  geom_line() +
+  # geom_line() +
   geom_point() + 
-  geom_ribbon(aes(ymin = rpw / 100000 - 1.96*sqrt(rpw_var) / 100000, 
-                  ymax = rpw / 100000+ 1.96*sqrt(rpw_var) / 100000), alpha = 0.2) + 
+  geom_errorbar(aes(ymin = rpw / 100000 - 1.96*sqrt(rpw_var) / 100000, 
+                  ymax = rpw / 100000+ 1.96*sqrt(rpw_var) / 100000)) + 
   labs(x = 'Year', y = 'Relative Population Weight') +
   scale_x_continuous(breaks = seq(1995, 2025, 5)) +
   scale_y_continuous(expand = c(0,0), limits = c(0, 16)) +
@@ -101,10 +101,10 @@ fmp_index <- area_dat |>
   write_csv(paste0(out_path, '/LLS_fmp_indices.csv'))
 
 ggplot(fmp_index |> filter(!strata == "WAI"), aes(year, rpn / 100000)) + 
-  geom_line() +
+  # geom_line() +
   geom_point() + 
-  geom_ribbon(aes(ymin = rpn / 100000 - 1.96*sqrt(rpn_var) / 100000, 
-                  ymax = rpn / 100000 + 1.96*sqrt(rpn_var) / 100000), alpha = 0.2) + 
+  geom_errorbar(aes(ymin = rpn / 100000 - 1.96*sqrt(rpn_var) / 100000, 
+                  ymax = rpn / 100000 + 1.96*sqrt(rpn_var) / 100000)) + 
   labs(x = 'Year', y = 'Relative Population Numbers') +
   scale_x_continuous(breaks = seq(1995, 2025, 5)) +
   scale_y_continuous(expand = c(0,0), limits = c(0, 4.5)) +
@@ -114,17 +114,17 @@ ggplot(fmp_index |> filter(!strata == "WAI"), aes(year, rpn / 100000)) +
 ggsave(paste0(out_path, '/fmp_LL_rpn.png'), dpi = 300, height = 3.5, width = 10)
 
 ggplot(fmp_index |> filter(!strata == "WAI"), aes(year, rpw / 100000)) + 
-  geom_line() +
+  # geom_line() +
   geom_point() + 
-  geom_ribbon(aes(ymin = rpw / 100000 - 1.96*sqrt(rpw_var) / 100000, 
-                  ymax = rpw / 100000 + 1.96*sqrt(rpw_var) / 100000), alpha = 0.2) + 
+  geom_errorbar(aes(ymin = rpw / 100000 - 1.96*sqrt(rpw_var) / 100000, 
+                  ymax = rpw / 100000 + 1.96*sqrt(rpw_var) / 100000)) + 
   labs(x = 'Year', y = 'Relative Population Weight') +
   scale_x_continuous(breaks = seq(1995, 2025, 5)) +
   scale_y_continuous(expand = c(0,0), limits = c(0, 16)) +
   theme_bw() +
   facet_wrap(~factor(strata, levels = c("EAI", "EBS", "GOA")), nrow = 1)
 
-ggsave(paste0(out_path, '/fmp_LL_rpw.png'), dpi = 300, height = 3.5, width = 10)
+ggsave(paste0(out_path, '/fmp_LL_rpw.png'), dpi = 300, height = 3.5, width = 10.5)
 
 biom <- dbGetQuery(channel_akfin, 
                    "select    *
@@ -146,9 +146,9 @@ biomass <- biom |>
   mutate(lci = ifelse(lci < 0, 0, lci))
 
 ggplot(biomass, aes(year, biomass)) + 
-  geom_line() +
+  # geom_line() +
   geom_point() + 
-  geom_ribbon(aes(ymin = lci, ymax = uci), alpha = 0.2) + 
+  geom_errorbar(aes(ymin = lci, ymax = uci)) + 
   labs(x = 'Year', y = 'Biomass (100,000 t)') +
   scale_x_continuous(breaks = seq(1995, 2025, 5)) +
   scale_y_continuous(expand = c(0,0), limits = c(0, 12.6)) +
@@ -187,7 +187,7 @@ ll.len = merge(ll.len, ll.means, by=c("year", "strata")) |>
   mutate(survey = "LLS")
 
 ggplot(ll.len, aes(year, mean, col = factor(strata, levels = c("AI", "EBS", "GOA")))) + 
-  geom_line() +
+  # geom_line() +
   geom_point() + 
   labs(x = "Year", y = "Mean pre-anal fin length (cm)") +
   scale_color_viridis_d("Area")
@@ -225,7 +225,7 @@ bts.len = merge(bts.len, bts.means, by=c("year", "strata")) |>
   mutate(survey = 'BTS')
 
 ggplot(bts.len, aes(year, mean, col = factor(strata, levels = c('EBS', 'AI', 'GOA')))) + 
-  geom_line() +
+  # geom_line() +
   geom_point() + 
   labs(x = "Year", y = "Mean pre-anal fin length (cm)") +
   scale_color_viridis_d("Area")
@@ -235,9 +235,10 @@ ggsave(paste0(out_path, '/BT_length.png'), dpi = 300, height = 5, width = 10)
 all.len <- bind_rows(ll.len, bts.len) |> 
   mutate(id = paste(as.character(survey), as.character(strata)))
 
-ggplot(all.len, aes(year, mean, col = survey)) + 
-  geom_line() +
-  geom_point() + 
+ggplot(all.len, aes(year, mean, shape = survey)) + 
+  scale_shape_manual(values = c(1,16)) +
+  # geom_line() +
+  geom_point(size = 3) + 
   facet_wrap(~strata) +
   # geom_smooth(method = 'lm') +
   labs(x = "Year", y = "Mean pre-anal fin length (cm)") +

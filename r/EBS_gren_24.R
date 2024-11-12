@@ -170,7 +170,7 @@ ggsave(filename = paste0(out_path, '/Mod24_biomass.png'),
 cowplot::plot_grid(comp$plots$biomass_by_strata +
                      theme(legend.position = 'top') +
                      geom_line() +
-                     labs(y = 'Biomass (t)', x = 'Year', 
+                     labs(y = 'Biomass (t)', x = 'Year', subtitle = 'BTS',
                           fill = NULL, colour = NULL, shape = NULL, lty = NULL) +
                      scale_fill_discrete(type = c('#440154FF')) +
                      scale_color_discrete(type = c('#440154FF')) +
@@ -178,7 +178,7 @@ cowplot::plot_grid(comp$plots$biomass_by_strata +
                    comp$plots$cpue_by_strata +
                      theme(legend.position = 'none') +
                      geom_line() +
-                     labs(y = 'RPW', x = 'Year',
+                     labs(y = 'RPW', x = 'Year', subtitle = 'LLS',
                           fill = NULL, colour = NULL, shape = NULL, lty = NULL) +
                      scale_fill_discrete(type = c('#440154FF')) +
                      scale_color_discrete(type = c('#440154FF')),

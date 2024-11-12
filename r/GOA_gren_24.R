@@ -87,7 +87,7 @@ ggsave(filename = paste0(out_path, '/Mod24_biomass.png'),
        dpi = 300, bg = 'white', units = 'in', height = 5, width = 10)
 
 cowplot::plot_grid(compare$plots$biomass_by_strata +
-                     labs(x = 'Year', y = 'Biomass (t)', subtitle = NULL,
+                     labs(x = 'Year', y = 'Biomass (t)', subtitle = 'BTS',
                           fill = NULL, colour = NULL, shape = NULL, lty = NULL) +
                      coord_cartesian(ylim=c(0, 500000)) +
                      facet_wrap(~factor(strata, levels=c('WGOA (0-500 m)','WGOA (501-700 m)','WGOA (701-1000 m)',
@@ -97,7 +97,7 @@ cowplot::plot_grid(compare$plots$biomass_by_strata +
                    compare$plots$cpue_by_strata  +
                      facet_wrap(~factor(strata, levels=c('WGOA', 'CGOA', 'EGOA')), ncol = 1) +
                      geom_line() +
-                     labs(x = 'Year', y = 'RPW', 
+                     labs(x = 'Year', y = 'RPW', subtitle = 'LLS', 
                           fill = NULL, colour = NULL, shape = NULL, lty = NULL) +
                      theme(legend.position = "none"),
                    ncol = 2,
